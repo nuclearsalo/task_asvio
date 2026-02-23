@@ -257,7 +257,7 @@ Python залежності:
 
 ---
 
-**Вирішення проблем**
+## Вирішення проблем
 
 1) *nginx не запускається*
 
@@ -273,9 +273,9 @@ Python залежності:
 
 Перевірте:
 
- 1.Значення у файлі .env (POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD),
+ 1. Значення у файлі .env (POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD),
  
- 2.Статус (health) контейнера Postgres.
+ 2. Статус (health) контейнера Postgres.
  
  3. Логи:
     

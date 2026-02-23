@@ -15,6 +15,12 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    #resource management db
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
 
   api:
     build:
@@ -33,6 +39,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    #resource management fastapi
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 256M
 
   nginx:
     image: nginx:alpine
@@ -52,6 +64,13 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+    #resource management nginx proxy
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 128M
+
 
 volumes:
   db_data:

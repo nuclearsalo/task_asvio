@@ -176,7 +176,7 @@ curl -k https://localhost/health
 Очікувана відповідь:
 ```JSON
 
-{"status":"ok"}
+{"status":200}
 ```
 
 `/health` перевіряє підключення до БД і повертає `HTTP 200` у разі успіху.
@@ -259,7 +259,7 @@ Python залежності:
 
 ## Вирішення проблем
 
-1) *nginx не запускається*
+1) *Nginx не запускається*
 
 Переконайтеся, що файли TLS сертифікатів існують:
 
@@ -273,11 +273,11 @@ Python залежності:
 
 Перевірте:
 
- 1. Значення у файлі .env (POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD),
+  - Значення у файлі .env (POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD),
  
- 2. Статус (health) контейнера Postgres.
+  - Статус (health) контейнера Postgres.
  
- 3. Логи:
+  - Логи:
     
 ```Bash
 docker compose logs db

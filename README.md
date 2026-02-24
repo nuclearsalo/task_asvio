@@ -287,6 +287,48 @@ docker compose logs nginx
 
 API намагається підключитися до БД під час запуску і використовує механізм повторних спроб.
 
+---
+
+## Скріни виконання
+
+*Налаштування середовища та ssh доступу*
+<img width="2559" height="1403" alt="ssh_connect" src="https://github.com/user-attachments/assets/9352d237-cb5d-4f4e-befa-e0a83ba1b69d" />
+
+*Успішне встановлення Docker Engine/Docker Compose*
+<img width="2559" height="1439" alt="docker_installed_success" src="https://github.com/user-attachments/assets/65518e45-085c-4970-ac1c-6aeddea0b872" />
+
+*Робота над `docker-compose.yml` - налаштування контейнера датабази. Ізольована `app_network`, `db_data volumes` та використання `.env` файла.*
+<img width="2556" height="1437" alt="docker_compose_file" src="https://github.com/user-attachments/assets/ed737dfc-58ec-417b-ae85-aa71b9a734cb" />
+
+*Тестування ініціалізації контейнеру PostgreSQL датабази + додатковий тестовий запис*
+<img width="2558" height="1439" alt="initialization_successful" src="https://github.com/user-attachments/assets/03620d44-44ac-4975-bbe1-b2de544620de" />
+<img width="437" height="86" alt="image" src="https://github.com/user-attachments/assets/73262c57-07ea-42e7-8ae1-cea071a7ca2a" />
+
+*Тестування готового білду проєкту.*
+*З логів збірки FastAPI сервісу чітко видно виконання ключових вимог щодо контейнеризації та безпеки:*
+
+*1. Використання мінімального базового образу `python:3.13-slim`*
+
+*2. Застосування багатокрокової збірки (наявність етапів `builder` та `stage-1`)*
+
+*3. Створення непривілейованого користувача `appuser` та групи `appgroup` (крок `[stage-1 5/6]`) для безпечного запуску контейнера без прав root.*
+
+*4. Наприкінці логу видно, що контейнер бази даних `postgres_db` перейшов у статус `Healthy` безпосередньо перед запуском `fastapi_app`. Це підтверджує успішну роботу healthcheck та реалізацію бонусного механізму `wait-for-db`.*
+<img width="2558" height="1439" alt="build" src="https://github.com/user-attachments/assets/35da1d26-cbec-4223-a3b1-305f1faea9b5" />
+
+*Приклади успішних запитів curl з очікуваним JSON поверненням*
+<img width="755" height="139" alt="image" src="https://github.com/user-attachments/assets/2e881417-a7d6-467d-8b6f-60c7962dcd12" />
+
+---
+
+## Коментар щодо Nginx
+
+Контейнери FastAPI та PostgreSQL у цьому проєкті налаштовані на роботу строго без прав root. Однак, інтернет овермайнд підсказує мені, що стандартний образ `nginx:alpine` запускає свій майстер-процес від імені `root`. "Це пов'язано з тим, що в Linux непривілейовані користувачі не можуть прослуховувати порти з номерами нижче 1024, до яких належить 443." 
+
+Можливим рішенням є використання `nginx-unprivileged:alpine`, налаштувати Nginx на прослуховування внутрішнього високого порту `listen 8443 ssl;`, а у `docker-compose.yml` використати форвард портів Docker для мапінгу зовнішнього трафіку на внутрішній: `ports: - "443:8443"`. Але я тут не знаю як краще зробити.
+
+---
+
 ## Ліцензія
 
 Наразі нема.

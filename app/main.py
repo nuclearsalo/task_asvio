@@ -53,7 +53,7 @@ def get_db_connection():
 
 
 #GET /health
-@app.get("/health")
+@app.get("/health", status_code=200)
 def health_check():
     try:
         conn = get_db_connection()
@@ -62,7 +62,7 @@ def health_check():
         cur.fetchone()
         cur.close()
         conn.close()
-        return {"status": "ok"}  # Fulfills Requirement: HTTP 200 on success
+        return {"status": 200}  # Fulfills Requirement: HTTP 200 on success
     except Exception as e:
         # Fulfills Requirement: HTTP 500 on error
         raise HTTPException(status_code=500, detail="Database connection failed")
